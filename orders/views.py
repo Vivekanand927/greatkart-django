@@ -15,7 +15,7 @@ def payments(request):
 
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
 
-    # Store transaction details inside Payment model
+    # Store transaction details
     payment = Payment(
         user = request.user,
         payment_id = body['transID'],
@@ -29,7 +29,7 @@ def payments(request):
     order.is_ordered = True
     order.save()
 
-    # Move the cart items to Order Product table
+    # Move the cart items
     cart_items = CartItem.objects.filter(user=request.user)
 
     for item in cart_items:
@@ -54,7 +54,7 @@ def payments(request):
         product.stock -= item.quantity
         product.save()
 
-    # Clear cart
+    # Clear the cart
     CartItem.objects.filter(user=request.user).delete()
 
     # Send order recieved email to customer
